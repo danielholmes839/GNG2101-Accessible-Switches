@@ -2,7 +2,7 @@ package main
 
 import (
 	//"github.com/go-vgo/robotgo"
-	"app/handlers"
+	"github.com/danielholmes839/GNG2101-Switches/handlers"
 
 	"github.com/tarm/serial"
 )

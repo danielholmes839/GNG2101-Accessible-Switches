@@ -1,4 +1,4 @@
-module app
+module github.com/danielholmes839/GNG2101-Switches
 
 go 1.15
 
