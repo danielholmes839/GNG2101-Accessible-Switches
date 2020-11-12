@@ -2,6 +2,8 @@ package main
 
 import (
 	//"github.com/go-vgo/robotgo"
+	"fmt"
+
 	"github.com/danielholmes839/GNG2101-Switches/handlers"
 
 	"github.com/tarm/serial"
@@ -17,7 +19,6 @@ func read(input chan int) {
 		s.Read(buf)
 		input <- int(buf[0])
 	}
-
 }
 
 func actions(input chan int, handler handlers.Handler) {
@@ -36,11 +37,14 @@ func actions(input chan int, handler handlers.Handler) {
 }
 
 func main() {
-	handler := handlers.DefaultHandler{}
 	input := make(chan int)
+	handler := handlers.NewScrollingHandler() //handlers.EmptyHandler{}
+	go handler.Start()
 	go read(input)
-	actions(input, handler)
+	go actions(input, handler)
 
+	fmt.Print("Running..!")
+	fmt.Scanln()
 	// robotgo.ScrollMouse(10, "up")
 	// robotgo.MouseClick("left", true)
 	// robotgo.MoveMouseSmooth(100, 200, 1.0, 100.0)
