@@ -8,5 +8,3 @@ type Handler interface {
 	Command4()
 	Start()
 }
-
-
