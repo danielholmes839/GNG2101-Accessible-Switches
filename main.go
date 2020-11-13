@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/danielholmes839/GNG2101-Switches/handlers"
-
+	"github.com/danielholmes839/GNG2101-Switches/helpers"
 	"github.com/tarm/serial"
 )
 
-func read(input chan int) {
+func read(input chan int, delay int) {
+	d := helpers.NewInputDelay(delay)
 	c := &serial.Config{Name: "COM5", Baud: 9600}
 	s, _ := serial.OpenPort(c)
 
@@ -17,13 +18,20 @@ func read(input chan int) {
 	buf := make([]byte, 1)
 	for {
 		s.Read(buf)
-		input <- int(buf[0])
+		if !d.IsBlocked() {
+			// Block input
+			d.SetBlocked(true)
+			go d.UnblockWithDelay()
+
+			// Receive input
+			input <- int(buf[0])
+		}
 	}
 }
 
 func actions(input chan int, handler handlers.Handler) {
-	for value := range input {
-		switch value {
+	for button := range input {
+		switch button {
 		case 1:
 			handler.Command1()
 		case 2:
@@ -40,12 +48,9 @@ func main() {
 	input := make(chan int)
 	handler := handlers.NewScrollingHandler() //handlers.EmptyHandler{}
 	go handler.Start()
-	go read(input)
-	go actions(input, handler)
+	go read(input, 150)        // send serial input accross the channel with minimum delay between inputs
+	go actions(input, handler) // receives serial input and trigger commands of handlers
 
-	fmt.Print("Running..!")
+	fmt.Println("Running!")
 	fmt.Scanln()
-	// robotgo.ScrollMouse(10, "up")
-	// robotgo.MouseClick("left", true)
-	// robotgo.MoveMouseSmooth(100, 200, 1.0, 100.0)
 }
