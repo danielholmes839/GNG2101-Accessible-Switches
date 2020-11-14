@@ -1,10 +1,13 @@
-package helpers
+package listeners
 
 import (
 	"time"
 )
 
-// InputDelay will stop additional input from happening (to avoid accidental double clicks or hardware issues)
+/* 
+InputDelay will stop additional input from happening (to avoid accidental double clicks or hardware issues) 
+InputDelay.Block() is the method that will Block for the duration
+*/
 type InputDelay struct {
 	length  time.Duration
 	blocked bool
@@ -20,13 +23,13 @@ func (d *InputDelay) IsBlocked() bool {
 	return d.blocked
 }
 
-// SetBlocked function check if the input should be blocked
-func (d *InputDelay) SetBlocked(value bool) {
-	d.blocked = value
+// Block then unblocks after the delay
+func (d *InputDelay) Block() {
+	d.blocked = true
+	go d.unblockWithDelay()
 }
 
-// UnblockWithDelay lock function start blocking inputs
-func (d *InputDelay) UnblockWithDelay() {
+func (d *InputDelay) unblockWithDelay() {
 	time.Sleep(d.length)
-	d.SetBlocked(false)
+	d.blocked = false
 }

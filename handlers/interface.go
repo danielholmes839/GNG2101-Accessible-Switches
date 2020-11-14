@@ -6,5 +6,5 @@ type Handler interface {
 	Command2()
 	Command3()
 	Command4()
-	Start()
+	Handle(input chan int) // start the handler
 }

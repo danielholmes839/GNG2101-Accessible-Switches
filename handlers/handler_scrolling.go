@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/go-vgo/robotgo"
@@ -91,6 +92,12 @@ func NewScrollingHandler() *ScrollingHandler {
 	}
 }
 
+// Handle input
+func (h *ScrollingHandler) Handle(input chan int) {
+	go defaultHandle(input, h)
+	h.start()
+}
+
 // Command1 func (stop)
 func (h *ScrollingHandler) Command1() {
 	h.command <- 1
@@ -112,7 +119,7 @@ func (h ScrollingHandler) Command4() {
 }
 
 // Start func
-func (h *ScrollingHandler) Start() {
+func (h *ScrollingHandler) start() {
 	for {
 		h.scroller1.Scroll(h.command)
 		h.scroller2.constant = h.scroller1.variable
@@ -123,11 +130,11 @@ func (h *ScrollingHandler) Start() {
 		value := <-h.command
 		switch value {
 		case 2:
-			robotgo.Click("left", false)
+			fmt.Println(value)
 		case 3:
-			robotgo.Click("right", false)
+			fmt.Println(value)
 		case 4:
-			robotgo.Click("left", true)
+			fmt.Println(value)
 		}
 	}
 }
