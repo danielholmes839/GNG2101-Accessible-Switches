@@ -28,7 +28,7 @@ func (handler EmptyHandler) Command4() {
 	fmt.Println("Command 4")
 }
 
-// Start func
-func (handler EmptyHandler) Start() {
-	fmt.Println("Start")
+// Handle func
+func (handler EmptyHandler) Handle(input chan int) {
+	defaultHandle(input, handler)
 }

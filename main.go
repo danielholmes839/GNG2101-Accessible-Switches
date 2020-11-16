@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"github.com/go-vgo/robotgo"
 	"fmt"
 
 	"github.com/danielholmes839/GNG2101-Switches/handlers"

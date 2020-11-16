@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"time"
 
+	"github.com/danielholmes839/GNG2101-Switches/handlers/clicker"
 	"github.com/go-vgo/robotgo"
 	"github.com/lxn/win"
 )
@@ -15,6 +15,7 @@ type Scroller struct {
 	constant  int // the variable that is constant
 	variable  int // the variable that wil change. if horizontal is true the x will change
 	limit     int // max width when horizontal, max height when verticle
+	scrolling bool
 }
 
 // NewScroller constructor
@@ -31,9 +32,8 @@ func NewScroller(speed int, reverse bool, horizontal bool) *Scroller {
 
 	if horizontal {
 		return &Scroller{delta: delta, direction: 0, constant: height / 2, variable: 5, limit: width}
-	} else {
-		return &Scroller{delta: delta, direction: 1, constant: width / 2, variable: 5, limit: height}
 	}
+	return &Scroller{delta: delta, direction: 1, constant: width / 2, variable: 5, limit: height}
 }
 
 func (s *Scroller) move() {
@@ -55,29 +55,28 @@ func (s *Scroller) move() {
 	}
 }
 
-// Scroll until 1 is received on the channel
-func (s *Scroller) Scroll(command chan int) {
-	running := true
+// Scroll until any input is received on the channel
+func (s *Scroller) Scroll(stop chan int) {
+	scrolling := true
 	go func() {
-		for running {
+		for scrolling {
 			s.move()
-			time.Sleep(time.Millisecond * 5)
+			time.Sleep(time.Millisecond * 15)
 		}
 	}()
-	for value := range command {
-		if value == 1 {
-			running = false
-			return
-		}
-	}
+
+	<-stop
+	scrolling = false
 }
 
-func (s *Scroller) reset() {
+// Reset method
+func (s *Scroller) Reset() {
 	s.variable = 0
 }
 
 // ScrollingHandler struct
 type ScrollingHandler struct {
+	clicker   *clicker.Clicker
 	scroller1 *Scroller
 	scroller2 *Scroller
 	command   chan int
@@ -86,6 +85,7 @@ type ScrollingHandler struct {
 // NewScrollingHandler Constructor
 func NewScrollingHandler() *ScrollingHandler {
 	return &ScrollingHandler{
+		clicker:   clicker.NewClicker(),
 		scroller1: NewScroller(5, false, true),
 		scroller2: NewScroller(5, true, false),
 		command:   make(chan int),
@@ -94,8 +94,8 @@ func NewScrollingHandler() *ScrollingHandler {
 
 // Handle input
 func (h *ScrollingHandler) Handle(input chan int) {
-	go defaultHandle(input, h)
-	h.start()
+	go h.start()
+	defaultHandle(input, h)
 }
 
 // Command1 func (stop)
@@ -104,17 +104,17 @@ func (h *ScrollingHandler) Command1() {
 }
 
 // Command2 func (click)
-func (h ScrollingHandler) Command2() {
+func (h *ScrollingHandler) Command2() {
 	h.command <- 2
 }
 
 // Command3 func
-func (h ScrollingHandler) Command3() {
+func (h *ScrollingHandler) Command3() {
 	h.command <- 3
 }
 
 // Command4 func
-func (h ScrollingHandler) Command4() {
+func (h *ScrollingHandler) Command4() {
 	h.command <- 4
 }
 
@@ -123,18 +123,39 @@ func (h *ScrollingHandler) start() {
 	for {
 		h.scroller1.Scroll(h.command)
 		h.scroller2.constant = h.scroller1.variable
-		h.scroller1.reset()
 		h.scroller2.Scroll(h.command)
-		h.scroller2.reset()
 
-		value := <-h.command
-		switch value {
-		case 2:
-			fmt.Println(value)
-		case 3:
-			fmt.Println(value)
-		case 4:
-			fmt.Println(value)
+		var x, y int
+		if h.scroller1.direction == 0 { // horizontal
+			x = h.scroller1.variable
+			y = h.scroller2.variable
+		} else {
+			x = h.scroller2.variable
+			y = h.scroller1.variable
 		}
+
+		for value := range h.command {
+			exit := false
+			switch value {
+			case 1:
+				exit = true
+			case 2:
+				// shortcut click
+				h.clicker.SpecificClick(x, y, 2)
+			case 3:
+				// selected click
+				h.clicker.Click(x, y)
+			case 4:
+				// change selected click
+				h.clicker.Next()
+			}
+
+			if exit {
+				break
+			}
+		}
+
+		h.scroller1.Reset()
+		h.scroller2.Reset()
 	}
 }
