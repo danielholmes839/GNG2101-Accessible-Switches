@@ -16,6 +16,7 @@ func NewClicker() *Clicker {
 	modes := []Mode{
 		&Click{name: "Right Click", side: "right", double: false},
 		&Click{name: "Left Click", side: "left", double: false},
+		&Click{name: "Double Right Click", side: "right", double: true},
 		&Click{name: "Double Left Click", side: "left", double: true},
 		&SetOrigin{},
 		&Drag{},
