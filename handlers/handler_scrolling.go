@@ -56,7 +56,7 @@ func (s *Scroller) move() {
 }
 
 // Scroll until any input is received on the channel
-func (s *Scroller) Scroll(stop chan int) {
+func (s *Scroller) Scroll(stop <-chan int) {
 	scrolling := true
 	go func() {
 		for scrolling {
@@ -93,29 +93,11 @@ func NewScrollingHandler() *ScrollingHandler {
 }
 
 // Handle input
-func (h *ScrollingHandler) Handle(input chan int) {
+func (h *ScrollingHandler) Handle(input <-chan int) {
 	go h.start()
-	defaultHandle(input, h)
-}
-
-// Command1 func (stop)
-func (h *ScrollingHandler) Command1() {
-	h.command <- 1
-}
-
-// Command2 func (click)
-func (h *ScrollingHandler) Command2() {
-	h.command <- 2
-}
-
-// Command3 func
-func (h *ScrollingHandler) Command3() {
-	h.command <- 3
-}
-
-// Command4 func
-func (h *ScrollingHandler) Command4() {
-	h.command <- 4
+	for value := range input {
+		h.command <- value
+	}
 }
 
 // Start func
@@ -125,14 +107,7 @@ func (h *ScrollingHandler) start() {
 		h.scroller2.constant = h.scroller1.variable
 		h.scroller2.Scroll(h.command)
 
-		var x, y int
-		if h.scroller1.direction == 0 { // horizontal
-			x = h.scroller1.variable
-			y = h.scroller2.variable
-		} else {
-			x = h.scroller2.variable
-			y = h.scroller1.variable
-		}
+		x, y := h.getPos()
 
 		for value := range h.command {
 			exit := false
@@ -158,4 +133,16 @@ func (h *ScrollingHandler) start() {
 		h.scroller1.Reset()
 		h.scroller2.Reset()
 	}
+}
+
+func (h *ScrollingHandler) getPos() (int, int) {
+	var x, y int
+	if h.scroller1.direction == 0 { // horizontal
+		x = h.scroller1.variable
+		y = h.scroller2.variable
+	} else {
+		x = h.scroller2.variable
+		y = h.scroller1.variable
+	}
+	return x, y
 }
