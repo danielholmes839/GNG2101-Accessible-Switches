@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-/* 
-InputDelay will stop additional input from happening (to avoid accidental double clicks or hardware issues) 
+/*
+InputDelay will stop additional input from happening (to avoid accidental double clicks or hardware issues)
 InputDelay.Block() is the method that will Block for the duration
 */
 type InputDelay struct {
