@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Accessible Switches</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="my-4">Accesible Switches Configuration</h1>
+    <hr>
+    <h3>Controls</h3>
+    <p class="text-muted">This is for reference only and cannot be changed</p>
+
+    <table class="table table-bordered mb-5">
+      <thead>
+        <tr>
+          <th scope="col">Method</th>
+          <th scope="col">Button 1</th>
+          <th scope="col">Button 2</th>
+          <th scope="col">Button 3</th>
+          <th scope="col">Button 4</th>
+        </tr>
+      </thead>
+      <tbody style="font-size: 14px;">
+        <tr>
+          <th style="font-weight: normal">Scrolling</th>
+          <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> restart
+            scrolling</td>
+          <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> shortcut</td>
+          <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> type of click
+          </td>
+          <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> toggle type
+            of click
+          </td>
+        </tr>
+        <tr>
+          <th style="font-weight: normal">Bisection</th>
+          <td><strong>Not ready to click:</strong> select left or top<br /><br /> <strong>Ready to click:</strong>
+            restart selection</td>
+          <td><strong>Not ready to click:</strong> select left or top<br /><br /> <strong>Ready to click:</strong>
+            restart selection</td>
+          <td><strong>First click:</strong> next orientation<br /><br /> <strong>Second click:</strong> ready to
+            click<br /><br />
+            <strong>Third click:</strong> type of click</td>
+          <td>Toggle type of click</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Required</h3>
+    <hr />
+    <div class="form-group">
+      <label><strong>COM Port</strong> - The COM port being used must be identified using windows device manager</label>
+      <select class="form-control" id="SerialPort">
+        <option value="COM1">COM1</option>
+        <option value="COM2">COM2</option>
+        <option value="COM3">COM3</option>
+        <option value="COM4">COM4</option>
+        <option value="COM5">COM5</option>
+        <option value="COM6">COM6</option>
+        <option value="COM7">COM7</option>
+        <option value="COM8">COM8</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label><strong>Input Delay</strong> - minimum delay between button presses
+        in milliseconds</label>
+      <input type="text" value="" class="form-control" id="InputDelay" placeholder="default: 50" />
+    </div>
+    <div class="form-group">
+      <label><strong>Shortcut</strong> - the shortcut can be set to make performing this type of click
+        faster</label>
+      <select class="form-control" id="Shortcut">
+        <option value="0">Right Click</option>
+        <option value="1">Left Click</option>
+        <option value="2">Double Right Click</option>
+        <option value="3">Double Left Click</option>
+        <option value="4">Set Drag & Drop Origin</option>
+        <option value="5">Drag & Drop</option>
+      </select>
+    </div>
+
+    <div class="form-group mb-5">
+      <label><strong>Select Order</strong> - orientation to select first
+        faster</label>
+      <select class="form-control" id="HorizontalFirst">
+        <option value="true">Horizontal First</option>
+        <option value="false">Vertical First</option>
+      </select>
+    </div>
+
+    <h3>Required (Scrolling Mode Only)</h3>
+    <hr />
+    <p class="text-muted">The number of pixels/second = frames per second * pixels per frame</p>
+    <form class="mb-5">
+      <!-- speed x,y, vertical/horizontal first -->
+      <div class="form-group">
+        <label><strong>Frames Per Second</strong> - the number of times the mouse will move per
+          second</label>
+        <input type="text" value="" class="form-control" placeholder="30, 60, 144 (any number)" id="FramesPerSecond" />
+      </div>
+      <div class="form-group">
+        <label><strong>Pixels Per Frame</strong> - the number of pixels the mouse will move per
+          second</label>
+        <input type="text" value="" class="form-control" placeholder="(any integer)" id="PixelsPerFrame" />
+      </div>
+      <div class="form-group">
+        <label><strong>Horizontal Scrolling Direction</strong></label>
+        <select class="form-control" id="LeftToRight">
+          <option value="true">Left To Right</option>
+          <option value="false">Right To Left</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><strong>Vertical Scrolling Direction</strong></label>
+        <select class="form-control" id="TopToBottom">
+          <option value="true">Top To Bottom</option>
+          <option value="false">Bottom To Top</option>
+        </select>
+      </div>
+    </form>
+
+    <h2><strong>Download</strong></h2>
+    <div class="mb-5">
+      <p>Download 'config.json' and place it next to the '.exe' that starts the program. The
+        program must be restarted in order for changes to take place.</p>
+      <button class="btn btn-outline-primary px-5 mr-3" onclick="scrolling()">Scrolling Config</button>
+      <button class="btn btn-outline-primary px-5" onclick="bisection()">Bisection Config</button>
+    </div>
+
+  </div>
+  <script>
+    let SerialPort = document.getElementById("SerialPort");
+    let InputDelay = document.getElementById("InputDelay");
+    let Shortcut = document.getElementById("Shortcut");
+    let HorizontalFirst = document.getElementById("HorizontalFirst");
+    let FramesPerSecond = document.getElementById("FramesPerSecond");
+    let PixelsPerFrame = document.getElementById("PixelsPerFrame");
+    let LeftToRight = document.getElementById("LeftToRight");
+    let TopToBottom = document.getElementById("TopToBottom");
+
+    const base = () => {
+      let data = {
+        port: SerialPort.value,
+        delay: parseInt(InputDelay.value),
+        config: {
+          Shortcut: parseInt(Shortcut.value),
+          HorizontalFirst: HorizontalFirst.value === "true",
+        }
+      }
+
+      if (isNaN(data.delay)) {
+        data.delay = 50;
+      }
+      return data;
+    }
+
+    const bisection = () => {
+      let data = base();
+      data.type = "bisection";
+      console.log(data);
+      download(data, "config");
+    }
+
+    const scrolling = () => {
+      let data = base();
+      data.type = "scrolling";
+      data.config.FramesPerSecond = parseInt(FramesPerSecond.value);
+      data.config.PixelsPerFrame = parseInt(PixelsPerFrame.value);
+      if (isNaN(data.config.FramesPerSecond)) {
+        data.config.FramesPerSecond = 60;
+      }
+      if (isNaN(data.config.PixelsPerFrame)) {
+        data.config.PixelsPerFrame = 5;
+      }
+      data.config.LeftToRight = LeftToRight.value === "true";
+      data.config.TopToBottom = TopToBottom.value === "true";
+      console.log(data);
+      download(data, "config");
+    }
+
+    let download = (data, name) => {
+      var str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+      var downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", str);
+      downloadAnchorNode.setAttribute("download", name + ".json");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    }
+  </script>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

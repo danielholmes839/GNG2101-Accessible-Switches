@@ -4,75 +4,7 @@ import (
 	"time"
 
 	"github.com/danielholmes839/GNG2101-Switches/handlers/clicker"
-	"github.com/go-vgo/robotgo"
-	"github.com/lxn/win"
 )
-
-// Scroller struct
-type Scroller struct {
-	delta     int // amount to change the variable value by
-	direction int // 0 -> horizontal, 1 -> vertical
-	constant  int // the variable that is constant
-	variable  int // the variable that wil change. if horizontal is true the x will change
-	limit     int // max width when horizontal, max height when verticle
-	scrolling bool
-}
-
-// NewScroller constructor
-func NewScroller(speed int, reverse bool, horizontal bool) *Scroller {
-	var delta int
-	if reverse {
-		delta = -speed
-	} else {
-		delta = speed
-	}
-
-	width := int(win.GetSystemMetrics(win.SM_CXSCREEN))
-	height := int(win.GetSystemMetrics(win.SM_CYSCREEN))
-
-	if horizontal {
-		return &Scroller{delta: delta, direction: 0, constant: height / 2, variable: 5, limit: width}
-	}
-	return &Scroller{delta: delta, direction: 1, constant: width / 2, variable: 5, limit: height}
-}
-
-func (s *Scroller) move() {
-	s.variable += s.delta
-
-	// Keep the mouse inside the screen
-	if s.variable < 0 {
-		s.variable = s.limit
-	} else {
-		s.variable %= s.limit
-	}
-
-	if s.direction == 0 {
-		// Horizontal
-		robotgo.MoveMouse(s.variable, s.constant)
-	} else {
-		// Verticle
-		robotgo.MoveMouse(s.constant, s.variable)
-	}
-}
-
-// Scroll until any input is received on the channel
-func (s *Scroller) Scroll(stop <-chan int) {
-	scrolling := true
-	go func() {
-		for scrolling {
-			s.move()
-			time.Sleep(time.Millisecond * 15)
-		}
-	}()
-
-	<-stop
-	scrolling = false
-}
-
-// Reset method
-func (s *Scroller) Reset() {
-	s.variable = 0
-}
 
 // ScrollingHandler struct
 type ScrollingHandler struct {
@@ -83,11 +15,21 @@ type ScrollingHandler struct {
 }
 
 // NewScrollingHandler Constructor
-func NewScrollingHandler() *ScrollingHandler {
+func NewScrollingHandler(config *ScrollingConfig) *ScrollingHandler {
+	delay := time.Duration((1000 / config.FramesPerSecond) * 1000000)
+	pixels := config.PixelsPerFrame
+
+	var scroller1Reverse, scroller2Reverse bool
+	if config.HorizontalFirst {
+		scroller1Reverse = !config.LeftToRight
+	} else {
+		scroller2Reverse = !config.TopToBottom
+	}
+
 	return &ScrollingHandler{
-		clicker:   clicker.NewClicker(),
-		scroller1: NewScroller(5, false, true),
-		scroller2: NewScroller(5, true, false),
+		clicker:   clicker.NewClicker(config.Shortcut),
+		scroller1: NewScroller(pixels, delay, scroller1Reverse, config.HorizontalFirst),
+		scroller2: NewScroller(pixels, delay, scroller2Reverse, !config.HorizontalFirst),
 		command:   make(chan int),
 	}
 }
@@ -116,7 +58,7 @@ func (h *ScrollingHandler) start() {
 				exit = true
 			case 2:
 				// shortcut click
-				h.clicker.SpecificClick(x, y, 2)
+				h.clicker.SpecificClick(x, y, h.clicker.Shortcut)
 			case 3:
 				// selected click
 				h.clicker.Click(x, y)
@@ -137,7 +79,7 @@ func (h *ScrollingHandler) start() {
 
 func (h *ScrollingHandler) getPos() (int, int) {
 	var x, y int
-	if h.scroller1.direction == 0 { // horizontal
+	if h.scroller1.horizontal { // horizontal
 		x = h.scroller1.variable
 		y = h.scroller2.variable
 	} else {

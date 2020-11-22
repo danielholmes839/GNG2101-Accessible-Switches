@@ -47,6 +47,8 @@ github.com/vcaesar/imgo v0.12.0/go.mod h1:ZSmAFXF91Ch6xe9iz1LinzALa6w9T6c57fH+Wq
 github.com/vcaesar/tt v0.10.1/go.mod h1:GHPxQYhn+7OgKakRusH7KJ0M5MhywoeLb8Fcffs/Gtg=
 github.com/vcaesar/tt v0.11.0 h1:obQecjgbnAxxC6OYGY6yDvhGRW2PR5wD8Ma2uJH3WGA=
 github.com/vcaesar/tt v0.11.0/go.mod h1:GHPxQYhn+7OgKakRusH7KJ0M5MhywoeLb8Fcffs/Gtg=
+go.bug.st/serial.v1 v0.0.0-20191202182710-24a6610f0541 h1:eQfoPfT+gNSh63t/oKanQlZyKgblRa/LMZRPIT+MHzA=
+go.bug.st/serial.v1 v0.0.0-20191202182710-24a6610f0541/go.mod h1:dRSl/CVCTf56CkXgJMDOdSwNfo2g1orOGE/gBGdvjZw=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20190418165655-df01cb2cc480/go.mod h1:WFFai1msRO1wXaEeE5yQxYXgSfI8pQAWXbQop6sCtWE=
 golang.org/x/crypto v0.0.0-20190510104115-cbcb75029529/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
