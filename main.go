@@ -8,15 +8,11 @@ import (
 )
 
 func main() {
+	config := handlers.GetConfig()
+	listener := listeners.NewSerialListener(config.SerialPort, 9600)
+	handler, _ := handlers.GetHandler(config)
+
 	input := make(chan int)
-	listener := listeners.NewSerialListener("COM5", 9600)
-	handler, err := handlers.GetHandler()
-
-	if err != nil {
-		fmt.Println(err)
-		panic(err)
-	}
-
 	go listener.Listen(input, 50)
 	go handler.Handle(input)
 

@@ -72,8 +72,7 @@ func GetConfig() *Config {
 }
 
 // GetHandler func
-func GetHandler() (Handler, error) {
-	config := GetConfig()
+func GetHandler(config *Config) (Handler, error) {
 	if config.IsScrollingConfig() {
 		return NewScrollingHandler(config.GetScrollingConfig()), nil
 	} else if config.IsBisectionConfig() {
