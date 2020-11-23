@@ -8,6 +8,8 @@ import (
 
 // ScrollingHandler struct
 type ScrollingHandler struct {
+	shortcut1 int
+	shortcut2 int
 	clicker   *clicker.Clicker
 	scroller1 *Scroller
 	scroller2 *Scroller
@@ -27,7 +29,9 @@ func NewScrollingHandler(config *ScrollingConfig) *ScrollingHandler {
 	}
 
 	return &ScrollingHandler{
-		clicker:   clicker.NewClicker(config.Shortcut),
+		shortcut1: config.Shortcut1,
+		shortcut2: config.Shortcut2,
+		clicker:   clicker.NewClicker(),
 		scroller1: NewScroller(pixels, delay, scroller1Reverse, config.HorizontalFirst),
 		scroller2: NewScroller(pixels, delay, scroller2Reverse, !config.HorizontalFirst),
 		command:   make(chan int),
@@ -58,11 +62,14 @@ func (h *ScrollingHandler) start() {
 				exit = true
 			case 2:
 				// shortcut click
-				h.clicker.SpecificClick(x, y, h.clicker.Shortcut)
+				h.clicker.SpecificClick(x, y, h.shortcut1)
 			case 3:
+				// shortcut click
+				h.clicker.SpecificClick(x, y, h.shortcut2)
+			case 4:
 				// selected click
 				h.clicker.Click(x, y)
-			case 4:
+			case 5:
 				// change selected click
 				h.clicker.Next()
 			}

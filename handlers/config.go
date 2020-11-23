@@ -46,7 +46,8 @@ func (config *Config) GetBisectionConfig() *BisectionConfig {
 
 // ScrollingConfig struct
 type ScrollingConfig struct {
-	Shortcut        int  `json:"Shortcut"`
+	Shortcut1       int  `json:"Shortcut1"`
+	Shortcut2       int  `json:"Shortcut2"`
 	HorizontalFirst bool `json:"HorizontalFirst"`
 	FramesPerSecond int  `json:"FramesPerSecond"`
 	PixelsPerFrame  int  `json:"PixelsPerFrame"`
@@ -56,7 +57,8 @@ type ScrollingConfig struct {
 
 // BisectionConfig struct
 type BisectionConfig struct {
-	Shortcut        int  `json:"Shortcut"`
+	Shortcut1       int  `json:"Shortcut1"`
+	Shortcut2       int  `json:"Shortcut2"`
 	HorizontalFirst bool `json:"HorizontalFirst"`
 }
 

@@ -2,7 +2,8 @@
     "port": "COM5",
     "delay": 50,
     "config": {
-        "Shortcut": 1,
+        "Shortcut1": 5,
+        "Shortcut2": 5,
         "HorizontalFirst": true,
         "FramesPerSecond": 144,
         "PixelsPerFrame": 5,

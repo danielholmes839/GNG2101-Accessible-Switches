@@ -8,8 +8,9 @@ import (
 
 // BisectionHandler struct
 type BisectionHandler struct {
-	state     int
-	shortcut  int
+	state     int // 0 selecting for first orientation, 1 selecting for second orientation, 2 ready to click
+	shortcut1 int
+	shortcut2 int
 	selector  *Selector
 	selector1 *Selector
 	selector2 *Selector
@@ -19,9 +20,11 @@ type BisectionHandler struct {
 // NewBisectionHandler Constructor
 func NewBisectionHandler(config *BisectionConfig) *BisectionHandler {
 	handler := &BisectionHandler{
+		shortcut1: config.Shortcut1,
+		shortcut2: config.Shortcut2,
 		selector1: NewSelector(config.HorizontalFirst),
-		selector2: NewSelector(config.HorizontalFirst),
-		clicker:   clicker.NewClicker(config.Shortcut),
+		selector2: NewSelector(!config.HorizontalFirst),
+		clicker:   clicker.NewClicker(),
 	}
 	handler.reset()
 	return handler
@@ -39,12 +42,15 @@ func (h *BisectionHandler) Handle(input <-chan int) {
 			h.command3()
 		case 4:
 			h.command4()
+		case 5:
+			h.command5()
 		}
 	}
 }
 
 // Command1 func
 func (h *BisectionHandler) command1() {
+	// Reset when ready to click or choose min (left, top)
 	if h.state == 2 {
 		h.reset()
 	} else {
@@ -52,18 +58,26 @@ func (h *BisectionHandler) command1() {
 	}
 }
 
-// Command2 func
 func (h *BisectionHandler) command2() {
+	// Shortcut when ready to click or choose max (right, bottom)
 	if h.state == 2 {
 		x, y := h.getPos()
-		h.clicker.SpecificClick(x, y, h.clicker.Shortcut)
+		h.clicker.SpecificClick(x, y, h.shortcut1)
 	} else {
 		h.selector.ChooseMax()
 	}
 }
 
-// Command3 func
 func (h *BisectionHandler) command3() {
+	// Shortcut when ready to click
+	if h.state == 2 {
+		x, y := h.getPos()
+		h.clicker.SpecificClick(x, y, h.shortcut2)
+	}
+}
+
+func (h *BisectionHandler) command4() {
+	// Toggle state to ready to click
 	if h.state == 2 {
 		x, y := h.getPos()
 		h.clicker.Click(x, y)
@@ -76,8 +90,8 @@ func (h *BisectionHandler) command3() {
 	}
 }
 
-// Command4 func
-func (h *BisectionHandler) command4() {
+func (h *BisectionHandler) command5() {
+	// Go to next type of click
 	h.clicker.Next()
 }
 

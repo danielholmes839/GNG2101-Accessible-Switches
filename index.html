@@ -13,7 +13,7 @@
   <title>Accessible Switches</title>
 </head>
 
-<body>
+<body style="padding-bottom: 10%;">
   <div class="container">
     <h1 class="my-4">Accesible Switches Configuration</h1>
     <hr>
@@ -26,8 +26,9 @@
           <th scope="col">Method</th>
           <th scope="col">Button 1</th>
           <th scope="col">Button 2</th>
-          <th scope="col">Button 3</th>
+          <th scope="col">Button 3 (Optional)</th>
           <th scope="col">Button 4</th>
+          <th scope="col">Button 5</th>
         </tr>
       </thead>
       <tbody style="font-size: 14px;">
@@ -35,6 +36,7 @@
           <th style="font-weight: normal">Scrolling</th>
           <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> restart
             scrolling</td>
+          <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> shortcut</td>
           <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> shortcut</td>
           <td><strong>While scrolling:</strong> stop scrolling<br /><br /> <strong>Not scrolling:</strong> type of click
           </td>
@@ -47,6 +49,8 @@
           <td><strong>Not ready to click:</strong> select left or top<br /><br /> <strong>Ready to click:</strong>
             restart selection</td>
           <td><strong>Not ready to click:</strong> select right or bottom<br /><br /> <strong>Ready to click:</strong>
+            shortcut</td>
+          <td><strong>Not ready to click:</strong> do nothing<br /><br /> <strong>Ready to click:</strong>
             shortcut</td>
           <td><strong>First click:</strong> next orientation<br /><br /> <strong>Second click:</strong> ready to
             click<br /><br />
@@ -76,9 +80,19 @@
       <input type="text" value="" class="form-control" id="InputDelay" placeholder="default: 50" />
     </div>
     <div class="form-group">
-      <label><strong>Shortcut</strong> - the shortcut can be set to make performing this type of click
-        faster</label>
-      <select class="form-control" id="Shortcut">
+      <label><strong>Shortcut 1</strong> - instantly trigger a specific click with a shortcut</label>
+      <select class="form-control" id="Shortcut1">
+        <option value="0">Right Click</option>
+        <option value="1">Left Click</option>
+        <option value="2">Double Right Click</option>
+        <option value="3">Double Left Click</option>
+        <option value="4">Set Drag & Drop Origin</option>
+        <option value="5">Drag & Drop</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label><strong>Shortcut 2</strong></label>
+      <select class="form-control" id="Shortcut2">
         <option value="0">Right Click</option>
         <option value="1">Left Click</option>
         <option value="2">Double Right Click</option>
@@ -141,7 +155,8 @@
   <script>
     let SerialPort = document.getElementById("SerialPort");
     let InputDelay = document.getElementById("InputDelay");
-    let Shortcut = document.getElementById("Shortcut");
+    let Shortcut1 = document.getElementById("Shortcut1");
+    let Shortcut2 = document.getElementById("Shortcut2");
     let HorizontalFirst = document.getElementById("HorizontalFirst");
     let FramesPerSecond = document.getElementById("FramesPerSecond");
     let PixelsPerFrame = document.getElementById("PixelsPerFrame");
@@ -153,7 +168,8 @@
         port: SerialPort.value,
         delay: parseInt(InputDelay.value),
         config: {
-          Shortcut: parseInt(Shortcut.value),
+          Shortcut1: parseInt(Shortcut1.value),
+          Shortcut2: parseInt(Shortcut1.value),
           HorizontalFirst: HorizontalFirst.value === "true",
         }
       }

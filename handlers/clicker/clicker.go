@@ -4,7 +4,6 @@ import "fmt"
 
 // Clicker type
 type Clicker struct {
-	Shortcut    int
 	dragOriginX int
 	dragOriginY int
 
@@ -13,7 +12,7 @@ type Clicker struct {
 }
 
 // NewClicker constructor
-func NewClicker(shortcut int) *Clicker {
+func NewClicker() *Clicker {
 	modes := []Mode{
 		&Click{name: "Right Click", side: "right", double: false},
 		&Click{name: "Left Click", side: "left", double: false},
@@ -22,7 +21,7 @@ func NewClicker(shortcut int) *Clicker {
 		&SetOrigin{},
 		&Drag{},
 	}
-	return &Clicker{Shortcut: shortcut, dragOriginX: 0, dragOriginY: 0, mode: 0, modes: modes}
+	return &Clicker{dragOriginX: 0, dragOriginY: 0, mode: 0, modes: modes}
 }
 
 // Next func
