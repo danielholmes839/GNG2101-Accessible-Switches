@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/danielholmes839/GNG2101-Switches/handlers"
 	"github.com/danielholmes839/GNG2101-Switches/listeners"
 )
@@ -13,7 +12,7 @@ func main() {
 	handler, _ := handlers.GetHandler(config)
 
 	input := make(chan int)
-	go listener.Listen(input, 50)
+	go listener.Listen(input, config.InputDelay)
 	go handler.Handle(input)
 
 	fmt.Println("Listening...")

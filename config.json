@@ -1,1 +1,13 @@
-{"port":"COM5","delay":50,"config":{"Shortcut":1,"HorizontalFirst":true,"FramesPerSecond":144,"PixelsPerFrame":5,"LeftToRight":true,"TopToBottom":false},"type":"scrolling"}
+{
+    "port": "COM5",
+    "delay": 50,
+    "config": {
+        "Shortcut": 1,
+        "HorizontalFirst": true,
+        "FramesPerSecond": 144,
+        "PixelsPerFrame": 5,
+        "LeftToRight": true,
+        "TopToBottom": false
+    },
+    "type": "scrolling"
+}

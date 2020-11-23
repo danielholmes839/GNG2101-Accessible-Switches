@@ -18,8 +18,11 @@ func NewSerialListener(port string, baudrate int) *SerialListener {
 // Listen for serial input and send it on the channel. with an input delay
 func (l *SerialListener) Listen(input chan<- int, delay int) {
 	d := NewInputDelay(delay)
-	c := &serial.Config{Name: "COM5", Baud: 9600}
-	s, _ := serial.OpenPort(c)
+	c := &serial.Config{Name: l.port, Baud: l.baudrate}
+	s, err := serial.OpenPort(c)
+	if err != nil {
+		panic("Could not open serial port on port: " + l.port)
+	}
 
 	// Read serial input
 	buf := make([]byte, 1)

@@ -62,9 +62,13 @@ type BisectionConfig struct {
 
 // GetConfig func
 func GetConfig() *Config {
-	file, _ := ioutil.ReadFile("config.json")
+	file, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		panic(err)
+	}
+
 	config := &Config{}
-	err := json.Unmarshal(file, &config)
+	err = json.Unmarshal(file, &config)
 	if err != nil {
 		panic(err)
 	}
