@@ -65,8 +65,12 @@ func (s *Scroller) Scroll(stop <-chan int) {
 		}
 	}()
 
-	<-stop
-	scrolling = false
+	for value := range stop {
+		if value == 1 {
+			scrolling = false
+			break
+		}
+	}
 }
 
 // Reset method
