@@ -13,8 +13,9 @@ func main() {
 	
 	input := make(chan int)
 	go listener.Listen(input, config.InputDelay)
-	go handler.Handle(input)
-
 	fmt.Println("Listening...")
-	fmt.Scanln()
+	
+	handler.Handle(input)
+
+	
 }
