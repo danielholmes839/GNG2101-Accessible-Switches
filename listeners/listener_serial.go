@@ -1,6 +1,8 @@
 package listeners
 
 import (
+	"fmt"
+
 	"github.com/tarm/serial"
 )
 
@@ -23,14 +25,16 @@ func (l *SerialListener) Listen(input chan<- int, delay int) {
 	if err != nil {
 		panic("Could not open serial port on port: " + l.port)
 	}
-
+	fmt.Println("Opened Serial Port Successfully")
 	// Read serial input
 	buf := make([]byte, 1)
 	for {
 		s.Read(buf)
 		if !d.IsBlocked() {
 			d.Block()
-			input <- int(buf[0])
+			value := int(buf[0])
+			fmt.Println(value)
+			input <- value
 		}
 	}
 }

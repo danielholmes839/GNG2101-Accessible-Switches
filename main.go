@@ -10,7 +10,7 @@ func main() {
 	config := handlers.GetConfig()
 	listener := listeners.NewSerialListener(config.SerialPort, 9600)
 	handler, _ := handlers.GetHandler(config)
-
+	
 	input := make(chan int)
 	go listener.Listen(input, config.InputDelay)
 	go handler.Handle(input)
