@@ -8,7 +8,8 @@
         "FramesPerSecond": 144,
         "PixelsPerFrame": 5,
         "LeftToRight": true,
-        "TopToBottom": false
+        "TopToBottom": false,
+        "ScrollPositionResets": true
     },
     "type": "scrolling"
 }
