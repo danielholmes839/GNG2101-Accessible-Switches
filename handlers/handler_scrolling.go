@@ -10,6 +10,7 @@ import (
 type ScrollingHandler struct {
 	shortcut1 int
 	shortcut2 int
+	reset     bool
 	clicker   *clicker.Clicker
 	scroller1 *Scroller
 	scroller2 *Scroller
@@ -31,6 +32,7 @@ func NewScrollingHandler(config *ScrollingConfig) *ScrollingHandler {
 	return &ScrollingHandler{
 		shortcut1: config.Shortcut1,
 		shortcut2: config.Shortcut2,
+		reset:     config.ScrollPositionResets,
 		clicker:   clicker.NewClicker(),
 		scroller1: NewScroller(pixels, delay, scroller1Reverse, config.HorizontalFirst),
 		scroller2: NewScroller(pixels, delay, scroller2Reverse, !config.HorizontalFirst),
@@ -79,8 +81,12 @@ func (h *ScrollingHandler) start() {
 			}
 		}
 
-		h.scroller1.Reset()
-		h.scroller2.Reset()
+		if h.reset {
+			h.scroller1.Reset()
+			h.scroller2.Reset()
+		} else {
+			h.scroller1.constant = h.scroller2.variable
+		}
 	}
 }
 

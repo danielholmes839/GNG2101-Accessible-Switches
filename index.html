@@ -77,13 +77,13 @@
     <div class="form-group">
       <label><strong>Input Delay</strong> - minimum delay between button presses
         in milliseconds</label>
-      <input type="text" value="" class="form-control" id="InputDelay" placeholder="default: 50" />
+      <input type="text" value="" class="form-control" id="InputDelay" placeholder="(default 50)" />
     </div>
     <div class="form-group">
       <label><strong>Shortcut 1</strong> - instantly trigger a specific click with a shortcut</label>
       <select class="form-control" id="Shortcut1">
         <option value="0">Right Click</option>
-        <option value="1">Left Click</option>
+        <option value="1" selected="selected">Left Click</option>
         <option value="2">Double Right Click</option>
         <option value="3">Double Left Click</option>
         <option value="4">Set Drag & Drop Origin</option>
@@ -119,12 +119,13 @@
       <div class="form-group">
         <label><strong>Frames Per Second</strong> - the number of times the mouse will move per
           second</label>
-        <input type="text" value="" class="form-control" placeholder="30, 60, 144 (any number)" id="FramesPerSecond" />
+        <input type="text" value="" class="form-control" placeholder="30, 60, 144 (any number, default 60)"
+          id="FramesPerSecond" />
       </div>
       <div class="form-group">
         <label><strong>Pixels Per Frame</strong> - the number of pixels the mouse will move per
           second</label>
-        <input type="text" value="" class="form-control" placeholder="(any integer)" id="PixelsPerFrame" />
+        <input type="text" value="" class="form-control" placeholder="(any integer, default 5)" id="PixelsPerFrame" />
       </div>
       <div class="form-group">
         <label><strong>Horizontal Scrolling Direction</strong></label>
@@ -139,6 +140,14 @@
         <select class="form-control" id="TopToBottom">
           <option value="true">Top To Bottom</option>
           <option value="false">Bottom To Top</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><strong>Reset Scrolling Position</strong> - an option to restart scrolling from the current position of
+          the mouse</label>
+        <select class="form-control" id="ScrollPositionResets">
+          <option value="true">Reset the scrolling position</option>
+          <option value="false">Restart from current location</option>
         </select>
       </div>
     </form>
@@ -162,6 +171,7 @@
     let PixelsPerFrame = document.getElementById("PixelsPerFrame");
     let LeftToRight = document.getElementById("LeftToRight");
     let TopToBottom = document.getElementById("TopToBottom");
+    let ScrollPositionResets = document.getElementById("ScrollPositionResets");
 
     const base = () => {
       let data = {
@@ -200,6 +210,7 @@
       }
       data.config.LeftToRight = LeftToRight.value === "true";
       data.config.TopToBottom = TopToBottom.value === "true";
+      data.config.ScrollPositionResets = ScrollPositionResets.value === "true";
       console.log(data);
       download(data, "config");
     }
