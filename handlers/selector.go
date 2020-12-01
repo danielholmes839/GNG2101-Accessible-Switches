@@ -36,16 +36,24 @@ func (s *Selector) Reset() {
 
 // ChooseMin method
 func (s *Selector) ChooseMin() {
-	s.max = s.variable
-	s.variable = (s.min + s.max) / 2
-	s.move()
+	if s.horizontal {
+		s.max = s.variable
+		s.variable = (s.min + s.max) / 2
+		s.move()
+	} else {
+		s.ChooseMax()
+	}
 }
 
 // ChooseMax method
 func (s *Selector) ChooseMax() {
-	s.min = s.variable
-	s.variable = (s.min + s.max) / 2
-	s.move()
+	if s.horizontal {
+		s.min = s.variable
+		s.variable = (s.min + s.max) / 2
+		s.move()
+	} else {
+		s.ChooseMin()
+	}
 }
 
 // Move method
